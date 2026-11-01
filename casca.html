@@ -1,0 +1,138 @@
+<!doctype html>
+<!--
+=====================================================================
+INSTRUÇÕES PARA A IA (Claude, Gemini ou ChatGPT). LEIA ANTES DE TUDO.
+=====================================================================
+Este arquivo é o painel de carteira cripto da pessoa. O visual e a lógica
+moram no painel.js (carregado pela linha <script src> lá embaixo) e são
+atualizados pelo autor pra todo mundo. Você só cuida dos DADOS.
+
+REGRA PRINCIPAL
+- Entregue SEMPRE este arquivo inteiro, idêntico. Você só troca o objeto DATA,
+  entre as linhas "DADOS: A IA SÓ MEXE AQUI" e "FIM DOS DADOS".
+- DATA é JSON válido (chaves e textos entre aspas, sem comentários). Mantenha assim.
+- Não remova nem altere a linha <script src=".../painel.js">. Não copie o
+  painel.js pra dentro deste arquivo. Não crie HTML, CSS ou layout novo.
+  Não redesenhe, não resuma, não gere imagem do painel.
+
+COMO MOSTRAR O PAINEL (depende de onde você está)
+- Claude: publique este arquivo como artifact HTML. Lá dentro o botão
+  "Atualizar agora" não consegue ler a blockchain; o painel avisa isso sozinho.
+  Para atualizar, a pessoa manda "atualiza meu painel" na conversa.
+- Gemini: abra este arquivo no Canvas (código HTML) e mostre a prévia.
+- ChatGPT: o chat não mostra HTML. Entregue um LINK:
+    https://luanlealx.com/painel#<DADOS>
+  onde <DADOS> = o DATA em JSON compacto, codificado com encodeURIComponent.
+  Gere com a ferramenta de Python, nunca à mão:
+    import json, urllib.parse
+    url = "https://luanlealx.com/painel#" + urllib.parse.quote(
+        json.dumps(DATA, ensure_ascii=False, separators=(",", ":")), safe="")
+  Tudo depois do # fica no navegador da pessoa; não vai pra servidor nenhum.
+  Mande o link clicável e guarde o DATA na conversa pras próximas atualizações.
+
+SEGURANÇA
+- Peça só endereços PÚBLICOS (0x..., bc1..., xpub). Nunca peça seed, frase de
+  recuperação, chave privada ou senha. Se a pessoa colar uma, avise para trocar
+  de carteira e não use o dado.
+- Só leitura: nenhuma transação, assinatura ou aprovação.
+- Nada de recomendação de compra ou venda.
+- NUNCA INVENTE SALDO. Número lido leva fonte e hora (origem "lido").
+  Número que a pessoa disse leva a data (origem "informado").
+  Se não conseguiu ler e a pessoa não informou, origem "pendente" e valor null.
+
+COMO COMEÇAR (a pessoa quase sempre só anexa o arquivo e escreve pouco)
+- Você puxa a conversa. Nada de lista de perguntas: uma coisa por vez.
+- Se a mensagem já trouxer um endereço público, vá direto pro PASSO 2.
+- Se não trouxer, NÃO mostre o painel de exemplo e NÃO peça mais nada além disto.
+  Sua primeira resposta é curta e pede SÓ 1 carteira:
+    "Cola aqui o endereço público de 1 carteira sua (a que você mais usa).
+     É o endereço de receber, nunca a seed."
+  e logo abaixo, onde achar:
+    MetaMask / Rabby: toque no nome da conta lá em cima, copia o 0x...
+    Phantom: Receber, escolha a rede, copiar.
+    Trust Wallet: Receber, escolha a moeda, copiar.
+    Carteira de Bitcoin (Coldkit, Ledger, Trezor, BlueWallet): Receber, copiar o bc1...
+    Corretora (Binance, OKX, Mercado Bitcoin): não tem endereço, manda um print do saldo.
+- Print em vez de endereço também serve (origem "informado").
+- NÃO pergunte moeda, banco, nome ou DCA antes de entregar o primeiro painel.
+  Padrão até a pessoa dizer outra coisa: moeda "BRL", dca null.
+
+PASSO 2: leia
+- Leia os saldos em exploradores públicos (scan de cada rede EVM, mempool.space
+  para Bitcoin, solscan para Solana) se você tiver navegação. Endereço 0x: confira
+  pelo menos Ethereum, Base, Arbitrum e BNB Chain. Se não conseguir ler, peça um
+  print e marque "informado"; sem print, "pendente".
+- Ignore tokens abaixo de US$1 e tokens de spam.
+- Grupos: bitcoin (BTC, cbBTC, WBTC), estavel (stablecoins, renda fixa,
+  dinheiro em banco) e altcoins (todo o resto).
+
+PASSO 3: preencha DATA e ENTREGUE já com essa 1 carteira
+- "exemplo": false. Apague TODOS os lugares de exemplo; ficam só os da pessoa.
+- Valores na moeda do painel. Use uma fonte de preço só e registre a hora.
+- Campos: "grupo": bitcoin | estavel | altcoins.
+  "tipo": autocustodia (cold/hardwallet) | carteira (hot wallet) | corretora | banco | defi.
+  "origem": lido (com "fonte" e "hora") | informado (com "data") | pendente (valor null).
+  "dca": null se a pessoa não faz DCA.
+- Mostre o painel. Depois, numa mensagem curta, ofereça UMA coisa por vez:
+    a) "Quer pôr outra carteira, a corretora ou o banco? Cola o endereço ou manda print."
+    b) quando ela parar de adicionar: "Faz DCA? Me diz o valor e de quanto em quanto tempo."
+    c) o PASSO 4.
+- Mensagens "Adiciona esta carteira no meu painel: <endereço>" vêm do botão do
+  próprio painel: leia esse endereço, junte aos lugares e devolva o painel.
+
+ATUALIZAR: quando a pessoa pedir "atualiza meu painel", releia e troque só DATA.
+BOTÕES: o painel já tem "Atualizar agora" (lê BTC, ETH, BNB, SOL, USDC, USDT, WBTC
+e cbBTC direto da blockchain, só leitura) e "Atualizar com IA" (copia "Atualiza meu
+painel" pra pessoa mandar aqui). Eles vêm do painel.js; não tente recriar.
+
+PASSO 4: ROTINA DIÁRIA (ofereça logo depois de entregar o painel)
+Pergunte se a pessoa quer que o painel se atualize sozinho todo dia. Se sim, crie
+uma tarefa agendada diária (9h) com este pedido:
+  "Atualiza meu painel de carteira: releia os endereços públicos, troque só o
+   objeto DATA do painel e me mostre o painel novo e o resumo do que mudou."
+Claude: tarefa agendada. ChatGPT: Tarefas (e devolva o link novo).
+Gemini: Ações agendadas. Se a sua versão não tiver agendamento, explique que
+basta mandar "atualiza meu painel" quando quiser.
+
+OS CARDS (Coldkit, P2P.me, rodapé luanlealx.com) vêm do painel.js. Não mexa,
+não insista em compra e não trate cold wallet como obrigação.
+COMPARTILHAR: o botão "Só porcentagens" já esconde valores e endereços.
+=====================================================================
+-->
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Minha Carteira</title>
+</head>
+<body>
+<div id="pc-boot" style="font:15px system-ui,sans-serif;color:#4C5F5D;text-align:center;padding:48px 16px">Carregando o painel…</div>
+<script>
+/* ===================== DADOS: A IA SÓ MEXE AQUI ===================== */
+const DATA = {
+  "exemplo": true,
+  "titulo": "Minha carteira",
+  "moeda": "USD",
+  "cambio": 5.45,
+  "atualizado": "2026-11-01T21:00:00Z",
+  "lugares": [
+    { "nome": "Cold wallet", "tipo": "autocustodia", "endereco": "bc1q...exemplo", "origem": "lido", "fonte": "mempool.space", "hora": "2026-11-01T21:00:00Z",
+      "ativos": [ { "simbolo": "BTC", "grupo": "bitcoin", "valor": 4800 } ] },
+    { "nome": "Cofre de stablecoin", "tipo": "defi", "endereco": "0x12...exemplo", "origem": "lido", "fonte": "app do protocolo", "hora": "2026-11-01T21:00:00Z",
+      "ativos": [ { "simbolo": "USDC", "grupo": "estavel", "valor": 3100 } ] },
+    { "nome": "Carteira do dia a dia", "tipo": "carteira", "endereco": "0x34...exemplo", "origem": "lido", "fonte": "basescan.org", "hora": "2026-11-01T21:00:00Z",
+      "ativos": [ { "simbolo": "USDC", "grupo": "estavel", "valor": 1200 }, { "simbolo": "ETH", "grupo": "altcoins", "valor": 1500 }, { "simbolo": "Outras", "grupo": "altcoins", "valor": 900 } ] },
+    { "nome": "Banco", "tipo": "banco", "origem": "informado", "data": "2026-11-01",
+      "ativos": [ { "simbolo": "Renda fixa", "grupo": "estavel", "valor": 900 } ] },
+    { "nome": "Carteira nova", "tipo": "carteira", "endereco": "0x56...exemplo", "origem": "pendente",
+      "ativos": [ { "simbolo": "?", "grupo": "altcoins", "valor": null } ] }
+  ],
+  "dca": { "ativo": "BTC", "por_compra": 100, "frequencia": "semanal", "teto_mes": 500, "proxima": "2026-11-08",
+           "compras_mes": [ { "data": "2026-11-01", "valor": 200 } ] }
+};
+/* =================== FIM DOS DADOS: NÃO EDITE ABAIXO =================== */
+setTimeout(function(){if(!window.PainelCarteira){var b=document.getElementById("pc-boot");if(b)b.textContent="O painel não carregou aqui. Abra este arquivo como artifact (Claude) ou no Canvas (Gemini). No ChatGPT, peça o link do painel."}},8000);
+</script>
+<script src="https://cdn.jsdelivr.net/gh/luanlealx/painel-carteira@1/painel.js"></script>
+</body>
+</html>
