@@ -13,14 +13,14 @@ O painel tem duas partes:
 | `painel.js` | o autor, por commit | layout, CSS, botões, leitura on-chain, cards, rodapé |
 | `casca.html` | a IA da pessoa | só o objeto `DATA` + a linha que carrega o `painel.js` |
 
-A casca carrega o núcleo pelo jsDelivr:
+A casca carrega o núcleo pelo jsDelivr, a partir do pacote npm `painel-carteira`. Tem que ser o caminho `/npm/`: os artifacts do Claude só liberam scripts de `cdn.jsdelivr.net/npm/`, e o caminho `/gh/` é bloqueado lá.
 
 ```html
 <script>const DATA = { ... };</script>
-<script src="https://cdn.jsdelivr.net/gh/luanlealx/painel-carteira@1/painel.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/painel-carteira@1/painel.js"></script>
 ```
 
-`@1` resolve pra última tag `v1.x.x`. Atualizar o painel de todo mundo = commit + tag nova na série 1.
+`@1` resolve pra última versão `1.x.x` publicada no npm. Atualizar o painel de todo mundo = commit + nova versão 1.x.x no npm.
 
 ## Onde roda
 
@@ -68,14 +68,12 @@ Mudou o formato de um jeito que a casca antiga quebra? Vira `@2` (tag `v2.0.0`) 
 ## Publicar uma versão
 
 ```bash
-git tag v1.0.1 && git push origin v1.0.1
+npm version patch        # 1.0.0 -> 1.0.1, cria commit e tag v1.0.1
+git push --follow-tags   # GitHub fica igual ao npm
+npm publish              # jsDelivr passa a servir @1 = 1.0.1
 ```
 
-O jsDelivr guarda `@1` em cache por até 7 dias. Pra valer na hora:
-
-```
-https://purge.jsdelivr.net/gh/luanlealx/painel-carteira@1/painel.js
-```
+O jsDelivr guarda `@1` em cache por até 7 dias. Pra valer na hora: `https://purge.jsdelivr.net/npm/painel-carteira@1/painel.js`
 
 ## Cópia de texto
 

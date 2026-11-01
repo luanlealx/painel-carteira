@@ -2,7 +2,7 @@
  * Só leitura: lê endereços públicos e saldos, nunca assina, nunca pede seed.
  * Uso: a casca define DATA e carrega este arquivo:
  *   <script>const DATA = {...}</script>
- *   <script src="https://cdn.jsdelivr.net/gh/luanlealx/painel-carteira@1/painel.js"></script>
+ *   <script src="https://cdn.jsdelivr.net/npm/painel-carteira@1/painel.js"></script>
  * Sem DATA, lê os dados do hash da URL (#<JSON em encodeURIComponent>), e sem nada mostra o exemplo.
  * Formato do DATA: ver README. Mudança de formato = versão maior (@2).
  */

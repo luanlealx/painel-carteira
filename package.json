@@ -1,0 +1,12 @@
+{
+  "name": "painel-carteira",
+  "version": "1.0.0",
+  "description": "Painel de carteira cripto só leitura que a pessoa instala na própria IA (Claude, Gemini, ChatGPT).",
+  "main": "painel.js",
+  "files": ["painel.js", "casca.html", "README.md"],
+  "keywords": ["bitcoin", "crypto", "wallet", "dashboard", "portfolio", "pt-BR"],
+  "author": "Luan Leal (https://luanlealx.com)",
+  "homepage": "https://luanlealx.com/painel",
+  "repository": { "type": "git", "url": "git+https://github.com/luanlealx/painel-carteira.git" },
+  "license": "UNLICENSED"
+}
